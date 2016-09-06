@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="1"
+        android:title="@string/settings_list_title"
+        android:entries="@array/pref_units_options"
+        android:entryValues="@array/pref_units_values"
+        android:key="@string/key_settings_list_title" />
+</PreferenceScreen>
