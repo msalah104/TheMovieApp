@@ -35,6 +35,7 @@
             android:layout_margin="@dimen/normale_layout_margin" />
 
         <RelativeLayout
+            android:id="@+id/fav_parent"
             android:layout_width="@dimen/zero_dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -59,6 +60,7 @@
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_below="@+id/detail_movie_data"
                 android:layout_marginTop="15dp"
                 android:id="@+id/detail_movie_duration"
@@ -80,6 +82,14 @@
                 android:id="@+id/detail_movie_rating"
                 tools:text="8.1/10"
                 android:textColor="@color/cardview_dark_background" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fav"
+                android:id="@+id/button_fav"
+                android:layout_below="@+id/detail_movie_rating"
+                android:layout_centerHorizontal="true"/>
 
         </RelativeLayout>
     </LinearLayout>

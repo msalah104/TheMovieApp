@@ -20,6 +20,7 @@ import msalah.mal.com.themovieapp.activity.MainActivity;
 import msalah.mal.com.themovieapp.activity.MoviesDetailsActivity;
 import msalah.mal.com.themovieapp.adaptor.MovieListAdaptor;
 import msalah.mal.com.themovieapp.controllers.MoviesDataController;
+import msalah.mal.com.themovieapp.controllers.OnMovieSelected;
 import msalah.mal.com.themovieapp.controllers.connection.OnDataReceivedListener;
 import msalah.mal.com.themovieapp.data.constants.AppConstants;
 import msalah.mal.com.themovieapp.data.Movie;
@@ -121,8 +122,6 @@ public class MainFragment extends Fragment implements OnDataReceivedListener, Vi
     public void onClick(View view) {
         int viewPosition = recyclerView.getChildAdapterPosition(view);
         Movie selectedMovie = movies.get(viewPosition);
-        Intent i = new Intent(getActivity(), MoviesDetailsActivity.class);
-        i.putExtra(AppConstants.SELECTED_MOVIE_KEY, selectedMovie);
-        startActivity(i);
+        ((OnMovieSelected)getActivity()).movieSelected(selectedMovie);
     }
 }

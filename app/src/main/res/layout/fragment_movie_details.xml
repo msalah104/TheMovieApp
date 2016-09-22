@@ -13,4 +13,5 @@
         android:layout_height="match_parent"
         android:background="@color/cardview_light_background"
         android:id="@+id/detail_movie_list_trailers" />
+
 </LinearLayout>

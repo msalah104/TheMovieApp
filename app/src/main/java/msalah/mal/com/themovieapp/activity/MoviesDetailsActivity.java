@@ -21,6 +21,8 @@ public class MoviesDetailsActivity extends AppCompatActivity {
 
     List <Movie> favList ;
 
+    public volatile static boolean isFaved = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,7 @@ public class MoviesDetailsActivity extends AppCompatActivity {
 
         selectedMovie = getIntent().getParcelableExtra(AppConstants.SELECTED_MOVIE_KEY);
 
+        isFaved = false;
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
         favList = databaseHandler.getAllMovies();
 
@@ -36,16 +39,6 @@ public class MoviesDetailsActivity extends AppCompatActivity {
         MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
         movieDetailsFragment.setArguments(bundle);
 
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, movieDetailsFragment).commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-
-        boolean isFaved = false;
-
         for (Movie movie : favList) {
             if (movie.getId().equalsIgnoreCase(selectedMovie.getId())) {
                 isFaved = true;
@@ -53,14 +46,9 @@ public class MoviesDetailsActivity extends AppCompatActivity {
             }
         }
 
-        if (isFaved) {
-            getMenuInflater().inflate(R.menu.menu_detials_fav, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.menu_detials, menu);
-        }
-
-        return true;
+        getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, movieDetailsFragment).commit();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

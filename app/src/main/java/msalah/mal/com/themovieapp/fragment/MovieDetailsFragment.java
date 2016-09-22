@@ -1,20 +1,25 @@
 package msalah.mal.com.themovieapp.fragment;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +28,7 @@ import java.util.List;
 
 import msalah.mal.com.themovieapp.R;
 import msalah.mal.com.themovieapp.activity.MovieAppPreferencesActivity;
+import msalah.mal.com.themovieapp.activity.MoviesDetailsActivity;
 import msalah.mal.com.themovieapp.adaptor.DetailsListAdaptor;
 import msalah.mal.com.themovieapp.controllers.ReviewsDataController;
 import msalah.mal.com.themovieapp.controllers.TrailersDataController;
@@ -69,6 +75,7 @@ public class MovieDetailsFragment extends Fragment implements OnDataReceivedList
     private DetailsListAdaptor detailsListAdaptor;
 
     int numberOfTrailers;
+    private RelativeLayout favParent;
 
     public MovieDetailsFragment() {
     }
@@ -101,11 +108,15 @@ public class MovieDetailsFragment extends Fragment implements OnDataReceivedList
         date  = (TextView) header.findViewById(R.id.detail_movie_data);
         duration  = (TextView) header.findViewById(R.id.detail_movie_duration);
         rate  = (TextView) header.findViewById(R.id.detail_movie_rating);
-//        fav  = (Button) header.findViewById(R.id.detail_movie_button_fav);
+        fav  = (Button) header.findViewById(R.id.button_fav);
+        favParent = (RelativeLayout) header.findViewById(R.id.fav_parent);
         overview  = (TextView) header.findViewById(R.id.detail_movie_overview);
         trailersAndReviewsList = (RecyclerView) rootView.findViewById(R.id.detail_movie_list_trailers);
         poster = (ImageView) header.findViewById(R.id.detail_movie_image);
 
+        if (MoviesDetailsActivity.isFaved) {
+            fav.setVisibility(View.GONE);
+        }
 
         // Setting data
 
@@ -117,21 +128,75 @@ public class MovieDetailsFragment extends Fragment implements OnDataReceivedList
         title.setText(selectedMovie.getTitle());
         overview.setText(selectedMovie.getOverview());
         date.setText(selectedMovie.getReleaseDate().split("-")[0]);
-        rate.setText(String.valueOf(selectedMovie.getVoteAverage()));
+        rate.setText(String.format("%.2f",selectedMovie.getVoteAverage()));
         Picasso.with(getActivity()).load(AppUtil.
                 getImageFullUrlWithPath(selectedMovie.getBackdropPath())).
                 into(poster);
 
-//        final DatabaseHandler db = new DatabaseHandler(getActivity());
+        trailersAndReviewsList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (v.equals(fav)) {
+
+
+                }
+
+                int actionBarHeight = 0;
+                TypedValue tv = new TypedValue();
+                if (getActivity().getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+                {
+                    actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+                }
+
+                int parentX = (int)favParent.getX();
+                int parentY =  actionBarHeight;
+
+                int buttonX = (int) fav.getX() + parentX;
+                int buttonY = (int)fav.getY() + parentY;
+
+                Rect buttonRect = new Rect ( buttonX, buttonY, buttonX + (int)fav.getWidth(), buttonY + fav.getHeight());
+                Rect clickRect = new Rect();
+                clickRect.set( (int)event.getX(), (int)event.getY(), (int)event.getX() + 1, (int)event.getY() + 1);
+
+                float screenX = event.getX();
+                float screenY = event.getY();
+                float viewX = screenX - fav.getLeft();
+                float viewY = screenY - fav.getTop();
+                float bLeft = fav.getLeft();
+                float bRight = fav.getRight();
+
+                float x = viewX + viewY + bLeft + bRight;
+
+                if (buttonRect.intersect(clickRect)) {
+
+                    if (MoviesDetailsActivity.isFaved) {
+                        Toast.makeText(getActivity(), "The Movie has been Already Added", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        final DatabaseHandler db = new DatabaseHandler(getActivity());
+                        db.addMovie(selectedMovie);
+                        Toast.makeText(getActivity(), "The Movie added successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+
+                return false;
+            }
+        });
+
+        final DatabaseHandler db = new DatabaseHandler(getActivity());
 //        fav.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                db.addMovie(selectedMovie);
-//                fav.setBackgroundColor(getActivity().getResources().getColor(R.color.colorAccent));
-////                fav.setClickable(false);
+//                //db.addMovie(selectedMovie);
+//                //fav.setBackgroundColor(getActivity().getResources().getColor(R.color.colorAccent));
+//                //fav.setClickable(false);
 //            }
 //        });
 
+//        header.requestFocus();
+//        Toast.makeText(getActivity(), "Get Focuse", Toast.LENGTH_LONG).show();
         return rootView;
     }
 
