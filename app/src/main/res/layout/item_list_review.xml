@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Mohammed Salah"
+        android:layout_margin="@dimen/normale_layout_margin"
+        android:textStyle="bold"
+        android:id="@+id/review_auther"
+        android:textColor="#000000" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Well another super-sized Marvel Comics superhero saga hits the big screen with the selected savior Captain America taking the top billing on the marquee. Thus, the pulsating popcorn pleaser **Captain America: Civil War** arrives on the scene to giddy audiences that have been loyal and fixated on the successful spring of mighty Marvel heroes that have been paraded to viewers throughout the last few years. Thankfully, **Captain America: Civil War** carries on the tradition of spry superhero-studded spectacles that have been "
+        android:id="@+id/review_content"
+        android:layout_margin="@dimen/normale_layout_margin"
+        android:maxHeight="50dp"
+        android:maxLines="5"
+        android:textColor="@color/cardview_dark_background" />
+</LinearLayout>

@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 public class Trailer extends MediaItem {
 
+    private static final String YOUTUBE_URL = "https://www.youtube.com/watch?v=";
     private String id;
     private String key;
     private String name;
@@ -96,4 +97,8 @@ public class Trailer extends MediaItem {
             return new Trailer[size];
         }
     };
+
+    public String getFullYoutubeUrl() {
+        return YOUTUBE_URL + key;
+    }
 }

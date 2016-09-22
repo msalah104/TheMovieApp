@@ -11,6 +11,12 @@ import msalah.mal.com.themovieapp.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String FULL_LIST = "list";
+
+    public static final String FAVORITES = "fav";
+
+    public volatile static String shownListType = FULL_LIST;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,9 +40,17 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(this, MovieAppPreferencesActivity.class);
                 startActivity(i);
                 return true;
-            default:
+            case R.id.menu_main_list:
+                 MainActivity.shownListType = FULL_LIST;
+                getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new MainFragment()).commit();
+                return super.onOptionsItemSelected(item);
+            case R.id.menu_main_favorites:
+                MainActivity.shownListType = FAVORITES;
+                getSupportFragmentManager().beginTransaction().replace(R.id.activity_main, new MainFragment()).commit();
                 return super.onOptionsItemSelected(item);
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

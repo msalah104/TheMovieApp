@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import java.util.List;
 import msalah.mal.com.themovieapp.R;
 import msalah.mal.com.themovieapp.data.constants.AppUtil;
 import msalah.mal.com.themovieapp.data.Movie;
+import msalah.mal.com.themovieapp.data.database.DatabaseHandler;
 
 /**
  * Created by user on 8/10/16.
@@ -26,11 +28,13 @@ public class MovieListAdaptor extends RecyclerView.Adapter<MovieListAdaptor.View
     List <Movie> movies;
     private Context context;
     private Fragment holderFragment;
+    private  DatabaseHandler db;
 
     public MovieListAdaptor(List<Movie> movies, Fragment fragment) {
         this.movies = movies;
         holderFragment = fragment;
         this.context = holderFragment.getActivity();
+        db = new DatabaseHandler(holderFragment.getActivity());
     }
 
     @Override
@@ -46,13 +50,11 @@ public class MovieListAdaptor extends RecyclerView.Adapter<MovieListAdaptor.View
     }
 
     @Override
-    public void onBindViewHolder(MovieListAdaptor.ViewHolder holder, int position) {
-        Movie movie = movies.get(position);
+    public void onBindViewHolder(final MovieListAdaptor.ViewHolder holder, int position) {
+       final Movie movie = movies.get(position);
         holder.movieTitle.setText(movie.getTitle());
         holder.movieDate.setText(movie.getReleaseDate());
         Picasso.with(context).load(AppUtil.getImageFullUrlWithPath(movie.getPosterPath())).into(holder.posterImageView);
-
-
     }
 
     @Override
@@ -65,6 +67,7 @@ public class MovieListAdaptor extends RecyclerView.Adapter<MovieListAdaptor.View
         TextView movieTitle;
         TextView movieDate;
         ImageView posterImageView;
+        Button favButton;
         int position;
 
         public ViewHolder(View itemView) {

@@ -1,6 +1,7 @@
 package msalah.mal.com.themovieapp.controllers.connection;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONException;
 
@@ -22,11 +23,12 @@ import msalah.mal.com.themovieapp.controllers.parse.Parser;
 
 public class Connection extends AsyncTask{
 
+    private static final String TAG = "Connection";
+
+    RequestDataSource requestDataSource;
     HttpURLConnection urlConnection = null;
     BufferedReader reader = null;
     Object tag;
-
-    RequestDataSource requestDataSource;
 
     @Override
     protected Object doInBackground(Object[] objects) {
@@ -39,6 +41,8 @@ public class Connection extends AsyncTask{
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
+
+            Log.i(TAG , "Url: " + requestDataSource.getRequestUrl());
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();

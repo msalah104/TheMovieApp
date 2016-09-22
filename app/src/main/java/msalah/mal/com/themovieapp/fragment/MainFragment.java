@@ -10,17 +10,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import msalah.mal.com.themovieapp.R;
+import msalah.mal.com.themovieapp.activity.MainActivity;
 import msalah.mal.com.themovieapp.activity.MoviesDetailsActivity;
 import msalah.mal.com.themovieapp.adaptor.MovieListAdaptor;
 import msalah.mal.com.themovieapp.controllers.MoviesDataController;
 import msalah.mal.com.themovieapp.controllers.connection.OnDataReceivedListener;
 import msalah.mal.com.themovieapp.data.constants.AppConstants;
 import msalah.mal.com.themovieapp.data.Movie;
+import msalah.mal.com.themovieapp.data.database.DatabaseHandler;
 
 
 public class MainFragment extends Fragment implements OnDataReceivedListener, View.OnClickListener {
@@ -37,11 +40,7 @@ public class MainFragment extends Fragment implements OnDataReceivedListener, Vi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
-
-
-
     }
 
     @Override
@@ -61,8 +60,6 @@ public class MainFragment extends Fragment implements OnDataReceivedListener, Vi
         movieListAdaptor = new MovieListAdaptor(new ArrayList<Movie>(), this);
         recyclerView.setAdapter(movieListAdaptor);
 
-
-
         return rootView;
     }
 
@@ -77,12 +74,31 @@ public class MainFragment extends Fragment implements OnDataReceivedListener, Vi
                 getString(R.string.key_top_rated));
         AppConstants.SortingType currentType = AppConstants.SortingType.valueOf(sortingType);
 
+        if (MainActivity.shownListType == MainActivity.FAVORITES) {
+            DatabaseHandler db = new DatabaseHandler(getActivity());
+            int numberOfMovies = db.getMoviesCount();
+            if(numberOfMovies != 0)
+            {
+                //Toast.makeText(getActivity(), "Favourite list has "+numberOfMovies+" items", Toast.LENGTH_LONG).show();
 
-        if ((movies == null )|| currentType != type) {
-            type = currentType;
-            moviesDataController = new MoviesDataController(type);
-            moviesDataController.getDataList(this, null);
+                movies = new ArrayList<Movie>();
+                movies = db.getAllMovies();
+                movieListAdaptor.setMovies(movies);
+                movieListAdaptor.notifyDataSetChanged();
+            }
+            else
+            {
+                Toast.makeText(getActivity(), "Favourite list is empty", Toast.LENGTH_LONG).show();
+            }
+
+        } else {
+            if ((movies == null )|| currentType != type) {
+                type = currentType;
+                moviesDataController = new MoviesDataController(type);
+                moviesDataController.getDataList(this, null);
+            }
         }
+
     }
 
 

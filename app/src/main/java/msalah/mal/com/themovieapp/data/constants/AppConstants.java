@@ -1,8 +1,6 @@
 package msalah.mal.com.themovieapp.data.constants;
 
-/**
- * Created by user on 8/10/16.
- */
+
 
 public class AppConstants {
 
